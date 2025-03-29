@@ -40,19 +40,6 @@ const Weather = () => {
     if (savedSearches) {
       setRecentSearches(JSON.parse(savedSearches));
     }
-
-    // const savedDarkMode = localStorage.getItem("darkMode");
-    // if (savedDarkMode !== null) {
-    //   setDarkMode(JSON.parse(savedDarkMode));
-    // } else {
-    //   // const prefersDarkMode = window.matchMedia(
-    //   //   "(prefers-color-scheme: dark)"
-    //   // ).matches;
-    //   setDarkMode(prefersDarkMode);
-    // }
-
-    // Initial search
-    // Get user's location if available, otherwise use default city
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -126,21 +113,6 @@ const Weather = () => {
     }
   };
 
-  const fetchForecast = async (city) => {
-    try {
-      const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=a50e6f279fa99e8e3d8f053ade9d080e`;
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (data.cod === "200") {
-        // Process 5-day forecast data
-        // const dailyData = processForecastData(data.list);
-        // setForecastData(dailyData);
-      }
-    } catch (error) {
-      console.error("Error fetching forecast:", error);
-    }
-  };
 
   // Process weather data
   const processWeatherData = (data) => {
@@ -154,63 +126,6 @@ const Weather = () => {
       description: data.weather[0].description,
     });
   };
-
-  // const processForecastData = (forecastList) => {
-  //   const dailyForecasts = {};
-
-  //   forecastList.forEach((item) => {
-  //     const date = new Date(item.dt * 1000).toISOString().split("T")[0];
-
-  //     const today = new Date().toISOString().split("T")[0];
-  //     if (date === today) return;
-
-  //     if (!dailyForecasts[date]) {
-  //       dailyForecasts[date] = {
-  //         date,
-  //         temps: [],
-  //         icons: [],
-  //         descriptions: [],
-  //       };
-  //     }
-
-  //     dailyForecasts[date].temps.push(item.main.temp);
-  //     dailyForecasts[date].icons.push(item.weather[0].icon);
-  //     dailyForecasts[date].descriptions.push(item.weather[0].description);
-  //   });
-
-  //   // Convert to array and calculate daily averages
-  //   return Object.values(dailyForecasts)
-  //     .map((day) => {
-  //       // Calculate average temperature
-  //       const avgTemp =
-  //         day.temps.reduce((sum, temp) => sum + temp, 0) / day.temps.length;
-
-  //       // Find the most common icon and description
-  //       const iconCounts = {};
-  //       day.icons.forEach((icon) => {
-  //         iconCounts[icon] = (iconCounts[icon] || 0) + 1;
-  //       });
-  //       const mostCommonIcon = Object.entries(iconCounts).sort(
-  //         (a, b) => b[1] - a[1]
-  //       )[0][0];
-
-  //       const descriptionCounts = {};
-  //       day.descriptions.forEach((desc) => {
-  //         descriptionCounts[desc] = (descriptionCounts[desc] || 0) + 1;
-  //       });
-  //       const mostCommonDescription = Object.entries(descriptionCounts).sort(
-  //         (a, b) => b[1] - a[1]
-  //       )[0][0];
-
-  //       return {
-  //         date: day.date,
-  //         avgTemp: Math.round(avgTemp),
-  //         icon: mostCommonIcon,
-  //         description: mostCommonDescription,
-  //       };
-  //     })
-  //     .slice(0, 5); // Limit to 5 days
-  // };
 
   const addToRecentSearches = (cityName) => {
     if (!cityName) return;
@@ -361,25 +276,6 @@ const Weather = () => {
               </div>
             </div>
           </div>
-          {/* {forecastData.length > 0 && (
-            <div className="forecast-container">
-              <h3>5-Day Forecast</h3>
-              <div className="forecast">
-                {forecastData.map((day, index) => (
-                  <div key={index} className="forecast-day">
-                    <p className="forecast-date">{formatDate(day.date)}</p>
-                    <img
-                      src={allIcons[day.icon] || clear_icon}
-                      alt={day.description}
-                      className="forecast-icon"
-                    />
-                    <p className="forecast-temp">{day.avgTemp}°C</p>
-                    <p className="forecast-desc">{day.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )} */}
         </>
       ) : (
         !loading && (
